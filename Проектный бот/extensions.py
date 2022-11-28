@@ -1,7 +1,7 @@
 import requests
 import json
 
-TOKEN = '5944737183:AAF9Og3lM9_EcotmsFQirAhBFYMkM-Tm_dM'
+TOKEN = ''
 
 headers= {
   "apikey": "84279f1113b2539016ac80b78521f49995ee15f742a223314aa451752f8272e7"
