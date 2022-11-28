@@ -24,7 +24,7 @@ def convert(message: telebot.types.Message):
         value = message.text.split(' ')
 
         if len(value) != 3:
-            raise ConvertionException('Задано неверное количество параметров.')
+            raise APIException('Задано неверное количество параметров.')
 
         quote, base, amount = value
         total_base = ValuteConvert.get_price(quote, base, amount)
