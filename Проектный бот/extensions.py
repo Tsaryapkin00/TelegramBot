@@ -1,18 +1,42 @@
 import requests
-import json
+
+
+# import json
 
 TOKEN = ''
 
-headers= {
-  "apikey": "84279f1113b2539016ac80b78521f49995ee15f742a223314aa451752f8272e7"
+headers = {
+  "apikey": ""
 }
 payload = {}
 
 keys = {
     'доллар': 'USD',
     'евро': 'EUR',
-    'рубль': 'RUB'
+    'рубль': 'RUB',
+    'юань': 'CNY',
+    'шекель': 'ILS',
+    'рупия': 'INR',
+    'вона': 'KRW',
+    'бат': 'THB',
+    'донг': 'VND',
+    'тенге': 'KZT',
+    'иена': 'JPY',
+    'марка': 'DEM',
+    'лира': 'ITL',
+    'фунт': 'GBP',
 }
+
+
+texta = 'Для начала работы введите команду боту в формате: \n <название валюты> \n \
+<название валюты в которую надо перевести>\n \
+<количество переводимой валюты>\n \
+Чтобы увидеть список доступных валют, введите: /values\n \
+Чтобы увидеть курс доллара к рублю, введите: /dollar\n \
+Чтобы увидеть курс евро к рублю, введите: /euro'
+
+txt1 = 'P.s Цены могут незначительно различаться, даже если между запросами прошло несколько секунд, \
+из-за постоянного перепада валютного рынка'
 
 def deling_found(response):
     deling = response.text.split(':')
@@ -29,25 +53,26 @@ class ValuteConvert:
     @staticmethod
     def get_price(quote: str, base: str, amount: str):
         if quote == base:
-            raise APIExceptionException(f'Не удалось перевести одинаковые валюты - {base}.')
+            raise APIException(f'Не удалось перевести одинаковые валюты - {base}.')
 
         try:
             quote_ticker = keys[quote.lower()]
         except KeyError:
-            raise APIExceptionException(f'Не удалось обработать валюту - {quote}')
+            raise APIException(f'Не удалось обработать валюту - {quote}')
 
         try:
             base_ticker = keys[base.lower()]
         except KeyError:
-            raise APIExceptionException(f'Не удалось обработать валюту - {base}')
+            raise APIException(f'Не удалось обработать валюту - {base}')
 
         try:
             amount = float(amount)
         except ValueError:
-            raise APIExceptionException(f'Не удалось обработать количество - {amount}')
+            raise APIException(f'Не удалось обработать количество - {amount}')
 
         url = f"https://min-api.cryptocompare.com/data/price?fsym={quote_ticker}&tsyms={base_ticker}"
         response = requests.request("GET", url, headers=headers, data=payload)
         deling = deling_found(response)
         total_base = deling * amount
+        total_base = abs(round(total_base, 3))
         return total_base
